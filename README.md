@@ -11,6 +11,7 @@ from pymicromegas import PyMicrOmegas
 
 interf = PyMicrOmegas()
 project = interf.create_newproject("test")
+project.load_mdl_files(["the", "list of", "your", ".mdl file", "paths"])
 
 args = {
   "parname1" : 1.0  # parameter values
@@ -29,3 +30,7 @@ flags = ["MASSES_INFO","OMEGA"]
 process = project.run(args,flags)  # return subprocess.CompletedProcess
 print(process.stdout)  # print the output text of micromegas
 ```
+
+# TODO
+- parse output text
+- etc...
