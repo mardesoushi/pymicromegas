@@ -24,7 +24,8 @@ from pymicromegas import PyMicrOmegas
 interf = PyMicrOmegas()
 project = interf.create_newproject("test")
 project.load_mdl_files(["the", "list of", "your", ".mdl file", "paths"])
-project.compile()
+project.compile()  # once a project is compiled, you can directly call the compiled project as Project(project_name).
+
 
 args = {
   "parname1" : 1.0  # parameter values
