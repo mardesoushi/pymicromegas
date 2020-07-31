@@ -1,6 +1,11 @@
 # pymicromegas
-python interface of micromegas
+Python interface of micromegas.
 
+## features
+pymicromegas:
+
+- directly reseives your model parameters as Python `dict` (does not generate internal `.par` files)
+- can switch on/off by `flags` parameter
 
 # How to use it
 
