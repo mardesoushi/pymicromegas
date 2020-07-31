@@ -167,6 +167,7 @@ class Project:
         args = "{} {} {} {}".format(int_flags,n_inputvals,par_names,par_vals)
         print(args)
         return self.run_bash("./main {}".format(args))
+    
         
         
     
