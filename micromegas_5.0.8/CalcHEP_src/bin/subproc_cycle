@@ -1,5 +1,5 @@
 : 
-  CALCHEP=/home/gomesu/workspace/pymicromegas/pymicromegas/micromegas_5.0.8/CalcHEP_src 
+  CALCHEP=  
 #---------------
 #======================================
 bin=$CALCHEP/bin
