@@ -62,9 +62,7 @@ int readVar_str(int nVar, char **varnames, char **strvals){
   int err;
   char *errstr;
   double val;
-  printf("nVar:%d\n", nVar);
   for(int i=0; i<nVar;i++){
-    printf("var:%s,\tval:%s",varnames[i],strvals[i]);
     val = strtod(strvals[i],&errstr);
     if(*errstr != '\0'){
       printf("invalid input:%s in %dth argument\n", errstr,i+1);
