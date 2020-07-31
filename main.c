@@ -96,7 +96,7 @@ int main(int argc,char** argv)
   }
                                
   //err=readVar(argv[1]);
-  flags = strtol(argv[1],&errstr,10);
+  flags = strtoul(argv[1],&errstr,10);
   if(*errstr != '\0'){
       printf("invalid input:%s for the number of parameters\n", errstr);
       exit(1);
