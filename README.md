@@ -1,11 +1,18 @@
 # pymicromegas
 Python interface of micromegas.
 
-## features
+## Features
 pymicromegas:
 
 - directly reseives your model parameters as Python `dict` (does not generate internal `.par` files)
 - can switch on/off by `flags` parameter
+
+If you don't like Python, instead, you can use `main.c/cpp` in `/pymicromegas/` just as normal `main.c/cpp` of micromegas.
+These modified `main` files receive arguments like:
+```
+./main <integer to define flags> <n: number of parameters> <parmeter name 1> ... <parmeter name n> <parmeter value 1> ... <parmeter value n>
+```
+
 
 # How to use it
 
