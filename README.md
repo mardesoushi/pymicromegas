@@ -24,6 +24,7 @@ from pymicromegas import PyMicrOmegas
 interf = PyMicrOmegas()
 project = interf.create_newproject("test")
 project.load_mdl_files(["the", "list of", "your", ".mdl file", "paths"])
+project.compile()
 
 args = {
   "parname1" : 1.0  # parameter values
