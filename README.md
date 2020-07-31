@@ -45,14 +45,15 @@ print(process.stdout)  # print the output text of micromegas
 
 # Class
 
-- `PyMicrOmegas`
-  - wrapper class of doing `newProject`, `make`, `make clean` in the micromegas directory.
-  - When pymicromegas imported for the first time, it unzip `miccromegas_5.0.8.tgz` and install (make) it
-  - If you want to modify micromegas, 
-    1. clean
-    1. modify 
-    1. make again
-- `Project`
+## `PyMicrOmegas`
+- wrapper class of doing `newProject`, `make`, `make clean` in the micromegas directory.
+- When pymicromegas imported for the first time, it unzip `miccromegas_5.0.8.tgz` and install (make) it
+If you want to modify micromegas, 
+1. clean
+1. modify 
+1. make again
+    
+## `Project`
   - wrapper class of `make`, `./main ...`, in project directories.
   -
 
