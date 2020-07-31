@@ -55,8 +55,13 @@ class PyMicrOmegas:
     def __init__(self,verbose=False):
         self.path = dir_micromegas
         
+        if os.path.isdir(self.path):
+            print("PyMicrOmegas: unzip micromegas...")
+            run_bash("tar -xzf micromegas_5.0.8.tgz",cwd=os.path.dirname(__file__))
+            
         if os.path.isfile(self.path + "include/microPath.h"): 
             pass
+        
         else:
             print("PyMicrOmegas: micromegas are not installed yet. Start install automatically...")
             outout = self.compile_micromegas()
