@@ -31,17 +31,17 @@ FLAGS = {
 }
 
 
-def flag_to_int(flag_name,bool_flag):
-    if type(bool_flag) is not bool: raise TypeError("invalid input for {}".format(key))
-    if bool_flag:
-        return FLAGS[flag_name]
-    else:
-        return 0
+#def flag_to_int(flag_name,bool_flag):
+#    if type(bool_flag) is not bool: raise TypeError("invalid input for {}".format(key))
+#    if bool_flag:
+#        return FLAGS[flag_name]
+#    else:
+#        return 0
 
     
-def flags_to_int(dict_flags):
-    int_flags = [flag_to_int(flag_name,bool_flag) for flag_name,bool_flag in dict_flags.items() ] 
-    return sum(int_flags)
+#def flags_to_int(dict_flags):
+#    int_flags = [flag_to_int(flag_name,bool_flag) for flag_name,bool_flag in dict_flags.items() ] 
+#    return sum(int_flags)
     
     
     
