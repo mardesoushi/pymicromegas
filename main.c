@@ -59,7 +59,7 @@
 
 
 int readVar_str(int nVar, char **varnames, char **strvals){
-  int err;
+  int err = 0;
   char *errstr;
   double val;
   for(int i=0; i<nVar;i++){
@@ -77,7 +77,7 @@ int readVar_str(int nVar, char **varnames, char **strvals){
 
 
 int main(int argc,char** argv)
-{  int err;
+{  int err = 0;
    char *errstr;
    char cdmName[10];
    int spin2, charge3,cdim;
