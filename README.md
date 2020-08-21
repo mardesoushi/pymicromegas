@@ -60,7 +60,7 @@ If you want to modify micromegas,
     
 ## `Project`
   - wrapper class of `make`, `./main ...`, in project directories.
-  - `Prpject.__call__` to directly return parsed micromegas outputs (callable object, used as if it is like a function. See the previous example.)
+  - `Project.__call__` to directly return parsed micromegas outputs (callable object, used as if it is like a function. See the previous example.)
 
 
 # TODO
