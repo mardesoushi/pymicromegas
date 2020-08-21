@@ -173,7 +173,20 @@ class Project:
         
         return self.run_bash("./main {}".format(args))
     
-        
+    
+    def parse(self,micromegas_output,flags=None):
+        if flags is None: raise RuntimeError("No flags specified")
+        return_dict = {}
+        if "OMEGA" in flags:
+            floatnize = lambda key_val: (key_val[0],float(key_val[1]))
+            lines = micromegas_output.split("\n")
+            ind = lines.index("==== Calculation of relic density =====")
+            key_vals = dict([floatnize(key_val.split("=")) for key_val in lines[ind+1].split(" ")])
+            return_dict.update(key_vals)
+        return return_dict
         
     
+    def __call__(self,dict_parameters,flags=None):
+        output = self.run(dict_parameters,flags).stdout
+        return self.parse(output,flags)
     
