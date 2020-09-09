@@ -41,8 +41,10 @@ args = {
 ##########
 flags = ["MASSES_INFO","OMEGA"]
 
-process = project.run(args,flags)  # return subprocess.CompletedProcess
-print(process.stdout)  # print the output text of micromegas
+#process = project.run(args,flags)  # return subprocess.CompletedProcess
+#print(process.stdout)  # print the output text of micromegas
+
+print(project(args,flags))  # directly return parsed output (at present, relic density only)
 ```
 
 # Class
@@ -58,9 +60,8 @@ If you want to modify micromegas,
     
 ## `Project`
   - wrapper class of `make`, `./main ...`, in project directories.
-  -
+  - `Project.__call__` to directly return parsed micromegas outputs (callable object, used as if it is like a function. See the previous example.)
 
 
 # TODO
-- parse output text
 - etc...
