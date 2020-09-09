@@ -42,7 +42,11 @@ FLAGS = {
 #def flags_to_int(dict_flags):
 #    int_flags = [flag_to_int(flag_name,bool_flag) for flag_name,bool_flag in dict_flags.items() ] 
 #    return sum(int_flags)
-    
+
+
+######## utils ########
+def to_abspath(path):
+    return str(Path(path).resolve())
     
     
 def run_bash(command,shell=True,stdout=subprocess.PIPE,encoding="UTF-8",check=True,input=None,cwd=None):
@@ -50,6 +54,7 @@ def run_bash(command,shell=True,stdout=subprocess.PIPE,encoding="UTF-8",check=Tr
 
 
 
+######## class definitions ########
 class PyMicrOmegas:    
     
     def __init__(self,verbose=False):
@@ -84,15 +89,28 @@ class PyMicrOmegas:
     
     def project_exists(self,project_name):
         return os.path.isdir(self.path + project_name)
+       
         
+    def install_main(self,project_name,return_project=False):
+        if not self.project_exists(project_name): 
+            raise RuntimeError("project '{}' does not exist yet.".format(project_name))
+            
+        commands = [ "mv {0}/main.cpp {0}/main_original.cpp", "cp ../main.c {0}/", "cp ../main.cpp {0}/"]
+        process = self.run_bash("\n".join(commands).format(project_name))
+        
+        if return_project:
+            return Project(project_name)
+        else: 
+            return process
     
     def create_newproject(self,project_name,return_project=False):
         if self.project_exists(project_name): 
             raise RuntimeError("project '{}' exists already.".format(project_name))
             
-        commands = [ "./newProject {0}", "mv {0}/main.cpp {0}/main_original.cpp", "cp ../main.c {0}/", "cp ../main.cpp {0}/"]
+        commands = [ "./newProject {0}" ]
         process = self.run_bash("\n".join(commands).format(project_name))
-        
+        process = self.install_main(project_name)
+         
         if return_project:
             return Project(project_name)
         else: 
@@ -137,7 +155,7 @@ class Project:
         processes = []
         for mdl_path in mdl_paths:
             if not os.path.isfile(mdl_path): raise RuntimeError("{} does not existing file".format(mdl_path))
-            abs_mdl_path = str(Path(mdl_path).resolve())
+            abs_mdl_path = to_abspath(mdl_path)
             process = self.run_bash("cp {} {}".format(abs_mdl_path,self.models_path))
             processes.append(process)
         return processes
@@ -170,7 +188,7 @@ class Project:
             dof_fname = "None"
         else:
             if not os.path.isfile(dof_fname): raise RuntimeError("{} does not existing file".format(dof_fname))
-            dof_fname = str(Path(dof_fname).resolve())
+            dof_fname = to_abspath(dof_fname)
         par_names = " ".join(map(str,dict_parameters.keys()))
         par_vals  = " ".join(map(str,dict_parameters.values()))
         args = f"{int_flags} {n_inputvals} {dof_fname} {par_names} {par_vals}"
