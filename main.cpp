@@ -222,7 +222,7 @@ if (flags & OMEGA)
   printf("\n==== Calculation of relic density =====\n");
  
   if (strcmp(argv[3],"None") != 0){
-      printf("load DOF file: %s....\n", argv[3]);
+      //printf("load DOF file: %s....\n", argv[3]);  
       err = loadHeffGeff(argv[3]);
       if(err<0){
           printf("invalid input: wrong format\n");

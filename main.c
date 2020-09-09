@@ -219,7 +219,6 @@ if (flags & OMEGA)
   double Beps=1.E-4, cut=0.01;
   double Omega;  
   int i,err; 
-  printf("\n==== Calculation of relic density =====\n");
  
   if (strcmp(argv[3],"None") != 0){
       printf("load DOF file: %s....\n", argv[3]);
@@ -233,6 +232,10 @@ if (flags & OMEGA)
           exit(1);
       }
   }
+ 
+  printf("\n==== Calculation of relic density =====\n");
+ 
+  
 
   if(CDM1 && CDM2) 
   {
