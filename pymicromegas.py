@@ -82,8 +82,8 @@ class PyMicrOmegas:
             #raise RuntimeError("micromegas is not properly installed. Run 'make all' in micromegas_5.0.8 directory")
     
     
-    def run_bash(self,command,shell=True,stdout=subprocess.PIPE,encoding="UTF-8",check=False,input=None):
-        return run_bash(command,shell=shell,stdout=stdout,encoding=encoding,check=check,input=input,cwd=self.path)
+    def run_bash(self,command,shell=True,stdout=subprocess.PIPE,encoding="UTF-8",check=False,input=None,verbose=True):
+        return run_bash(command,shell=shell,stdout=stdout,encoding=encoding,check=check,input=input,cwd=self.path,verbose=True)
     
     
     def compile_micromegas(self):
@@ -165,7 +165,7 @@ class Project:
         self.models_path = self.path + "work/models/"
     
     
-    def run_bash(self,command,shell=True,stdout=subprocess.PIPE,encoding="UTF-8",check=False,input=None):
+    def run_bash(self,command,shell=True,stdout=subprocess.PIPE,encoding="UTF-8",check=False,input=None,verbose=True):
         '''
         run './main' and return the output string.
         '''
@@ -222,7 +222,7 @@ class Project:
         par_vals  = " ".join(map(str,dict_parameters.values()))
         args = f"{int_flags} {n_inputvals} {dof_fname} {par_names} {par_vals}"
         
-        return self.run_bash("./main {}".format(args))
+        return self.run_bash("./main {}".format(args),verbose=False)
     
     
     def parse(self,micromegas_output,flags=None):
