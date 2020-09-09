@@ -83,7 +83,7 @@ class PyMicrOmegas:
     
     
     def run_bash(self,command,shell=True,stdout=subprocess.PIPE,encoding="UTF-8",check=False,input=None,verbose=True):
-        return run_bash(command,shell=shell,stdout=stdout,encoding=encoding,check=check,input=input,cwd=self.path,verbose=True)
+        return run_bash(command,shell=shell,stdout=stdout,encoding=encoding,check=check,input=input,cwd=self.path,verbose=verbose)
     
     
     def compile_micromegas(self):
@@ -169,7 +169,7 @@ class Project:
         '''
         run './main' and return the output string.
         '''
-        return run_bash(command,shell=shell,stdout=stdout,encoding=encoding,check=check,input=input,cwd=self.path)
+        return run_bash(command,shell=shell,stdout=stdout,encoding=encoding,check=check,input=input,cwd=self.path,verbose=verbose)
     
     
     def load_mdl_files(self,mdl_paths):
