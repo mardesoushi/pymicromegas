@@ -109,22 +109,10 @@ int main(int argc,char** argv)
       printf("invalid input:%s for the number of parameters\n", errstr);
       exit(1);
     }
-  
-  if (strcmp(argv[3],"None") != 0){
-      printf("load DOF file: %s....\n", argv[3]);
-      err = loadHeffGeff(argv[3]);
-      if(err<0){
-          printf("invalid input: wrong format\n");
-          exit(1);
-      }
-      if(err==0){ 
-          printf("invalid input: cannot open %s\n", argv[3]);
-          exit(1);
-      }
-  } 
+   
  
   if(1 + n_options + 2*n_inputvals != argc){
-      printf("invalid input: missmatching the number of parameters (passed: %d, required: 2 * %d)\n", argc-3, n_inputvals);
+      printf("invalid input: missmatching the number of parameters (passed: %d, required: 2 * %d)\n", argc-n_options, n_inputvals);
       exit(1);
   }
   /********
@@ -232,6 +220,19 @@ if (flags & OMEGA)
   double Omega;  
   int i,err; 
   printf("\n==== Calculation of relic density =====\n");
+ 
+  if (strcmp(argv[3],"None") != 0){
+      printf("load DOF file: %s....\n", argv[3]);
+      err = loadHeffGeff(argv[3]);
+      if(err<0){
+          printf("invalid input: wrong format\n");
+          exit(1);
+      }
+      if(err==0){ 
+          printf("invalid input: cannot open %s\n", argv[3]);
+          exit(1);
+      }
+  }
 
   if(CDM1 && CDM2) 
   {
