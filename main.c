@@ -52,6 +52,7 @@
 #define CLEAN (1UL << 17)
 /*===== End of DEFINE  settings ===== */
 
+#include<string.h>
 
 #include"../include/micromegas.h"
 #include"../include/micromegas_aux.h"
@@ -83,15 +84,16 @@ int main(int argc,char** argv)
    int spin2, charge3,cdim;
    unsigned long flags = 0;
    int n_inputvals = 0;
+   const int n_options = 3;  // <integer for flags>, <the number of parameterss>, <DOFfilename or None>
 
   ForceUG=0;  /* to Force Unitary Gauge assign 1 */
 
   VZdecay=0; VWdecay=0;  
 
-  if(argc<3)
+  if(argc<1+n_options)
   { 
-      printf(" Correct usage:  ./main <integer for flags> <the number of parameters> <parameter name 1> <parameter name 2> ... <parameter value 1> <parameter value 2> ... \n");
-      printf("Example: ./main 0 par1 par2 1.0 2.0 \n");
+      printf("usage:  ./main <integer for flags> <the number of parameters> <DOFfilename or \"None\"> <parameter name 1> <parameter name 2> ... <parameter value 1> <parameter value 2> ... \n");
+      printf("Example: ./main 0 2 None par1 par2 1.0 2.0 \n");
       exit(1);
   }
                                
@@ -107,17 +109,30 @@ int main(int argc,char** argv)
       printf("invalid input:%s for the number of parameters\n", errstr);
       exit(1);
     }
+  
+  if (strcmp(argv[3],"None") != 0){
+      printf("load DOF file: %s....\n", argv[3]);
+      err = loadHeffGeff(argv[3]);
+      if(err<0){
+          printf("invalid input: wrong format\n");
+          exit(1);
+      }
+      if(err==0){ 
+          printf("invalid input: cannot open %s\n", argv[3]);
+          exit(1);
+      }
+  } 
  
-  if(1 + 2 + 2*n_inputvals != argc){
-      printf("invalid input: missmatching the number of parameters (passed: %d, required: 2 * %d)\n", argc-3, n_inputvals);
+  if(1 + n_options + 2*n_inputvals != argc){
+      printf("invalid input: missmatching the number of parameters (passed: %d, required: 2 * %d)\n", argc-n_options, n_inputvals);
       exit(1);
   }
   /********
    Note: order of parameters:  
-      ./main n par1 par2 ... parn val1 val2 ...
-      0      1 2    3    ... n+1  n+2  n+3  ...
+      ./main n m fname par1 par2 ... parn val1 val2 ...
+      0      1 2 3     4    5    ... n+3  n+4  n+5  ...
   ********/
-  err = readVar_str(n_inputvals,&argv[3],&argv[n_inputvals+3]);
+  err = readVar_str(n_inputvals,&argv[1+n_options],&argv[n_inputvals+1+n_options]);
   
   if(err==-1)     {printf("Can not open the file\n"); exit(1);}
   else if(err>0)  { printf("Wrong file contents at line %d\n",err);exit(1);}

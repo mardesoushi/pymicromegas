@@ -158,18 +158,22 @@ class Project:
         return vars
     
     
-    def run(self,dict_parameters,flags=None):
+    def run(self,dict_parameters,flags=None,dof_fname=None):
         """
         kwargs: see 'PyMicrOmegas.FlAGS.keys()'. 
         """
         
         #int_flags = flags_to_int(kwargs)
         int_flags = 0 if (flags is None) else sum( FLAGS[key] for key in flags )
-
         n_inputvals = len(dict_parameters)
+        if dof_fname is None:
+            dof_fname = "None"
+        else:
+            if not os.path.isfile(dof_fname): raise RuntimeError("{} does not existing file".format(dof_fname))
+            dof_fname = str(Path(dof_fname).resolve())
         par_names = " ".join(map(str,dict_parameters.keys()))
         par_vals  = " ".join(map(str,dict_parameters.values()))
-        args = "{} {} {} {}".format(int_flags,n_inputvals,par_names,par_vals)
+        args = f"{int_flags} {n_inputvals} {dof_fname} {par_names} {par_vals}"
         
         return self.run_bash("./main {}".format(args))
     
@@ -186,7 +190,7 @@ class Project:
         return return_dict
         
     
-    def __call__(self,dict_parameters,flags=None):
-        output = self.run(dict_parameters,flags).stdout
+    def __call__(self,dict_parameters,flags=None,dof_fname=None):
+        output = self.run(dict_parameters,flags,dof_fname).stdout
         return self.parse(output,flags)
     
