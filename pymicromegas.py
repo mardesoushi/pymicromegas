@@ -49,10 +49,17 @@ def to_abspath(path):
     return str(Path(path).resolve())
     
     
-def run_bash(command,shell=True,stdout=subprocess.PIPE,encoding="UTF-8",check=True,input=None,cwd=None):
-    return subprocess.run(command,shell=shell,stdout=stdout,encoding=encoding,check=check,input=input,cwd=cwd)
+def run_bash(command,shell=True,stdout=subprocess.PIPE,encoding="UTF-8",check=True,input=None,cwd=None,verbose=True):
+    if verbose: print(command)
+    process = subprocess.run(command,shell=shell,stdout=stdout,encoding=encoding,check=check,input=input,cwd=cwd)
+    return process
 
-
+def is_valid_project_name(project_name):
+    """
+    Check that given project_name is valid.
+    Valid project names consist of [a-z]/[A-Z]/[",", ".", "-", "_"].
+    """
+    return project_name.replace(",","").replace(".","").replace("-","").replace("_","").isalnum()
 
 ######## class definitions ########
 class PyMicrOmegas:    
@@ -80,10 +87,12 @@ class PyMicrOmegas:
     
     
     def compile_micromegas(self):
+        print("Compiling micromegas...")
         return self.run_bash("make")
 
     
     def clean_micromegas(self):
+        print("Cleaning micromegas...")
         return self.run_bash("make clean",input="y\n")
     
     
@@ -92,6 +101,7 @@ class PyMicrOmegas:
        
         
     def load_modified_main(self,project_name,return_project=False):
+        print("Loading modified main files...")
         if not self.project_exists(project_name): 
             raise RuntimeError("project '{}' does not exist yet.".format(project_name))
             
@@ -104,8 +114,9 @@ class PyMicrOmegas:
             return process
     
     def create_newproject(self,project_name,return_project=False):
-        if self.project_exists(project_name): 
-            raise RuntimeError("project '{}' exists already.".format(project_name))
+        print("Creating new project...")
+        if not is_valid_project_name(project_name): raise RuntimeError(f"'{project_name}' is not valid project name.")
+        if self.project_exists(project_name): raise RuntimeError("project '{}' exists already.".format(project_name))
             
         commands = [ "./newProject {0}" ]
         process = self.run_bash("\n".join(commands).format(project_name))
@@ -121,9 +132,20 @@ class PyMicrOmegas:
         if self.project_exists(project_name):
             return Project(project_name)
         else:
-            print("Project {} is not created yet. Start creating...".format(project_name))
+            print(f"Project {project_name} is not created yet. Start creating...")
             return self.create_newproject(project_name,return_project=True)
+        
     
+    def remove_project(self,project_name):
+        print("Removing project...")
+        if ("/" in project_name) or () : raise RuntimeError(f"{project_name} is not valid project name.")  # "rm" is dangerous!!! We shold check project name is properly passed. 
+        if not self.project_exists(project_name): raise RuntimeError(f"project '{project_name}' does not exists.")
+        
+        project = Project(project_name)
+        if not project.is_user_defined_project: raise RuntimeError(f"{project_name} is not created by users. remove_project cannot remove default projects.")
+        command = f"rm -r {project_name}"
+        process = self.run_bash(command)
+        return process
     
 #    def load_mdl(self,project_name,mdl_paths):
 #        if self.project_exists(project_name): raise RuntimeError("project '{}' exists already.".format(project_name))
@@ -151,11 +173,14 @@ class Project:
     
     
     def load_mdl_files(self,mdl_paths):
+        print("Loading .mdl files...")
         if type(mdl_paths) not in [list, tuple]: raise RuntimeError("input arguments must be list or tuple.")
+        if len(mdl_paths)==0: raise RuntimeError("input argument is empty list or tuple.")
         processes = []
         for mdl_path in mdl_paths:
             if not os.path.isfile(mdl_path): raise RuntimeError("{} does not existing file".format(mdl_path))
             abs_mdl_path = to_abspath(mdl_path)
+            print(f"Loading {abs_mdl_path}...")
             process = self.run_bash("cp {} {}".format(abs_mdl_path,self.models_path))
             processes.append(process)
         return processes
@@ -172,8 +197,12 @@ class Project:
     
     @property
     def vars(self):
-        vars = np.loadtxt(self.models_path+"vars1.mdl",skiprows=3,delimiter="|",dtype=str)
+        vars = np.loadtxt(self.models_path+"vars1.mdl",skiprows=3,delimiter="|",dtype=str,comments="=")  # .mdl file sometimes contain "=======..." line
         return vars
+    
+    @property
+    def is_user_defined_project(self):
+        return os.path.exists(self.path+"main_original.c")
     
     
     def run(self,dict_parameters,flags=None,dof_fname=None):
