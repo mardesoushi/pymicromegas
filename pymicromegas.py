@@ -69,7 +69,7 @@ class PyMicrOmegas:
         
         else:
             print("PyMicrOmegas: micromegas are not installed yet. Start install automatically...")
-            outout = self.compile_micromegas()
+            output = self.compile_micromegas()
             print("PyMicrOmegas: micromegas are installed.")
             if verbose: print(output)
             #raise RuntimeError("micromegas is not properly installed. Run 'make all' in micromegas_5.0.8 directory")
