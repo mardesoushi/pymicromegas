@@ -91,11 +91,11 @@ class PyMicrOmegas:
         return os.path.isdir(self.path + project_name)
        
         
-    def install_main(self,project_name,return_project=False):
+    def load_modified_main(self,project_name,return_project=False):
         if not self.project_exists(project_name): 
             raise RuntimeError("project '{}' does not exist yet.".format(project_name))
             
-        commands = [ "mv {0}/main.cpp {0}/main_original.cpp", "cp ../main.c {0}/", "cp ../main.cpp {0}/"]
+        commands = [ "mv {0}/main.c {0}/main_original.c", "mv {0}/main.cpp {0}/main_original.cpp", "cp ../main.c {0}/", "cp ../main.cpp {0}/"]
         process = self.run_bash("\n".join(commands).format(project_name))
         
         if return_project:
@@ -109,7 +109,7 @@ class PyMicrOmegas:
             
         commands = [ "./newProject {0}" ]
         process = self.run_bash("\n".join(commands).format(project_name))
-        process = self.install_main(project_name)
+        process = self.load_modified_main(project_name)
          
         if return_project:
             return Project(project_name)
