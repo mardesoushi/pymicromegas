@@ -3,6 +3,7 @@ import subprocess
 import sys
 from pathlib import Path 
 import numpy as np
+from pandas import Series
 
 
 dir_micromegas = os.path.dirname(__file__) + "/micromegas_5.0.8/"
@@ -60,6 +61,16 @@ def is_valid_project_name(project_name):
     Valid project names consist of [a-z]/[A-Z]/[",", ".", "-", "_"].
     """
     return project_name.replace(",","").replace(".","").replace("-","").replace("_","").isalnum()
+
+
+def get_keys(dict_like_object):
+    return dict.keys()
+
+def get_values(dict_like_object):
+    if isinstance(dict_like_object,Series): 
+        return dict_like_object.values
+    else:
+        return dict_like_object.values()
 
 ######## class definitions ########
 class PyMicrOmegas:    
@@ -153,7 +164,7 @@ class PyMicrOmegas:
 #            if path[-4:] != ".mdl": raise RuntimeError("{} is not .mdl file".format(path))
 #            commands = [ "cd {0}","cp main=main.cpp"]
     
-
+    
     
 class Project:
     
@@ -208,6 +219,8 @@ class Project:
     def run(self,dict_parameters,flags=None,dof_fname=None):
         """
         kwargs: see 'PyMicrOmegas.FlAGS.keys()'. 
+        
+        dict_parameters: dict or pandas.Series
         """
         
         #int_flags = flags_to_int(kwargs)
@@ -218,8 +231,9 @@ class Project:
         else:
             if not os.path.isfile(dof_fname): raise RuntimeError("{} does not existing file".format(dof_fname))
             dof_fname = to_abspath(dof_fname)
-        par_names = " ".join(map(str,dict_parameters.keys()))
-        par_vals  = " ".join(map(str,dict_parameters.values()))
+        
+        par_names = " ".join(map(str,get_keys(dict_parameters)))
+        par_vals  = " ".join(map(str,get_values(dict_parameters.values)))
         args = f"{int_flags} {n_inputvals} {dof_fname} {par_names} {par_vals}"
         
         return self.run_bash("./main {}".format(args),verbose=False)
