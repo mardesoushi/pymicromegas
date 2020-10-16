@@ -231,7 +231,11 @@ class Project:
         if "OMEGA" in flags:
             floatnize = lambda key_val: (key_val[0],float(key_val[1]))
             lines = micromegas_output.split("\n")
-            ind = lines.index("==== Calculation of relic density =====")
+            #ind = lines.index("==== Calculation of relic density =====")
+            try:
+                ind = lines.index("==== Calculation of relic density =====")
+            except ValueError as e:
+                raise ValueError(f"Cannot find the line \"==== Calculation of relic density =====\"\noutput:{micromegas_output}")
             key_vals = dict([floatnize(key_val.split("=")) for key_val in lines[ind+1].split(" ")])
             return_dict.update(key_vals)
         return return_dict
