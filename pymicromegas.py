@@ -64,7 +64,7 @@ def is_valid_project_name(project_name):
 
 
 def get_keys(dict_like_object):
-    return dict.keys()
+    return dict_like_object.keys()
 
 def get_values(dict_like_object):
     if isinstance(dict_like_object,Series): 
