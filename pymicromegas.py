@@ -233,7 +233,7 @@ class Project:
             dof_fname = to_abspath(dof_fname)
         
         par_names = " ".join(map(str,get_keys(dict_parameters)))
-        par_vals  = " ".join(map(str,get_values(dict_parameters.values)))
+        par_vals  = " ".join(map(str,get_values(dict_parameters)))
         args = f"{int_flags} {n_inputvals} {dof_fname} {par_names} {par_vals}"
         
         return self.run_bash("./main {}".format(args),verbose=False)
