@@ -44,7 +44,10 @@ flags = ["MASSES_INFO","OMEGA"]
 #process = project.run(args,flags)  # return subprocess.CompletedProcess
 #print(process.stdout)  # print the output text of micromegas
 
-print(project(args,flags))  # directly return parsed output (at present, relic density only)
+outout_dict = project(args,flags)  # directly return parsed output (at present, relic density only)
+output_dict = project.calc_omega(args)  # directly return parsed output about relic density with channels
+
+print(output_dict)  
 ```
 
 # Class
