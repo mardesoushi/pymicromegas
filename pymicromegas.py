@@ -286,6 +286,6 @@ class Project:
         output = self.run(dict_parameters,flags,dof_fname).stdout
         return self.parse_omega(output,flags)
     
-    def calc_omega(self,dict_parameters,flags=None,dof_fname=None):
-        output = self.run(dict_parameters,flags,dof_fname).stdout
+    def calc_omega(self,dict_parameters,dof_fname=None):
+        output = self.run(dict_parameters,flags=["OMEGA"],dof_fname=dof_fname).stdout
         return self.parse_omega(output,flags,with_channels=True)    
