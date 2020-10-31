@@ -239,7 +239,20 @@ class Project:
         return self.run_bash("./main {}".format(args),verbose=False)
     
     
-    def parse(self,micromegas_output,flags=None):
+    def parse_omega(self,micromegas_output,flags=None,with_channels=False):
+        def parse_channel(channel_str):
+            """
+            parse channel string.
+            If channel_str is not proper, return None
+            """
+            terms = channel_str.split()
+            if (len(terms) != 5) or (len(terms[3]) <= 2) or (terms[3][:2] != "->"): return None
+            
+            branching = terms[0]
+            ch_in = (terms[1],terms[2])
+            ch_out = (terms[3][2:],terms[4])
+            return {"Br":branching,"in":ch_in,"out":ch_out}
+        
         if flags is None: raise RuntimeError("No flags specified")
         return_dict = {}
         if "OMEGA" in flags:
@@ -252,11 +265,27 @@ class Project:
                 raise ValueError(f"Cannot find the line \"==== Calculation of relic density =====\"\noutput:{micromegas_output}")
             key_vals = dict([floatnize(key_val.split("=")) for key_val in lines[ind+1].split(" ")])
             return_dict.update(key_vals)
+            
+            #### parse channels ####
+            if with_channels:
+                channels = []
+                print(lines[ind+4:])
+                for line in lines[ind+4:]:
+                    ch = parse_channel(line)
+                    print(ch)
+                    if ch is not None:
+                        channels.append(ch)
+                    else: 
+                        break
+                return_dict["channels"] = channels
+            
         return return_dict
         
     
     def __call__(self,dict_parameters,flags=None,dof_fname=None):
         output = self.run(dict_parameters,flags,dof_fname).stdout
-        return self.parse(output,flags)
-   
+        return self.parse_omega(output,flags)
     
+    def calc_omega(self,dict_parameters,flags=None,dof_fname=None):
+        output = self.run(dict_parameters,flags,dof_fname).stdout
+        return self.parse_omega(output,flags,with_channels=True)    
