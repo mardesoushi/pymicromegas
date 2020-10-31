@@ -269,10 +269,8 @@ class Project:
             #### parse channels ####
             if with_channels:
                 channels = []
-                print(lines[ind+4:])
                 for line in lines[ind+4:]:
                     ch = parse_channel(line)
-                    print(ch)
                     if ch is not None:
                         channels.append(ch)
                     else: 
