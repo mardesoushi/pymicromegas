@@ -6,7 +6,7 @@ import numpy as np
 from pandas import Series
 
 
-dir_micromegas = os.path.dirname(__file__) + "/micromegas_5.0.8/"
+dir_micromegas = os.path.dirname(__file__) + "/micromegas_6.1.15/"
 
 
 
